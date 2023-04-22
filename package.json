@@ -1,0 +1,42 @@
+{
+	"name": "govaldocs",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"dev": "NODE_ENV=development nodemon --quiet --no-stdin -x \"node --harmony\" index.js",
+		"build": "bash render.sh",
+		"preview": "wrangler pages dev out --compatibility-date=2023-04-22",
+		"deploy": "wrangler pages publish out",
+		"package": "rm -f out.zip && cd out && zip -r ../out.zip *"
+	},
+	"keywords": [],
+	"author": "PotentialStyx",
+	"license": "MIT",
+	"dependencies": {
+		"@minify-html/node": "^0.10.8",
+		"chalk": "^5.2.0",
+		"ejs": "^3.1.9",
+		"highlight.js": "^11.7.0",
+		"wrangler": "^2.16.0"
+	},
+	"nodemonConfig": {
+		"verbose": false,
+		"ignore": [
+			".config/*"
+		],
+		"ext": "*.*"
+	},
+	"devDependencies": {
+		"@webpack-cli/generators": "^2.5.0",
+		"koa": "^2.13.4",
+		"koa-ejs": "^4.3.0",
+		"koa-mount": "^4.0.0",
+		"koa-router": "^12.0.0",
+		"koa-send": "^5.0.1",
+		"koa-static": "^5.0.0",
+		"koa-webpack": "^6.0.0",
+		"nodemon": "^2.0.22"
+	}
+}

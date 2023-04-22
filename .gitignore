@@ -1,0 +1,6 @@
+yarn.lock
+test.mjs
+*.zip
+node_modules
+.vscode
+out
