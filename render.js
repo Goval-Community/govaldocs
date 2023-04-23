@@ -36,11 +36,18 @@ const highlighting_script_regex =
 const to_compile = [];
 let longestPath = 0;
 
-async function crawlDir(dirs, prefix, writePrefix, lastWithLayout) {
+async function crawlDir(
+	dirs,
+	prefix,
+	writePrefix,
+	lastWithLayout,
+	page_data = {},
+) {
+	const files = dirs.map((item) => item.name);
 	// If _layout.ejs exists in directory mark that as the most recently seen layout file.
 	// This is used so that if a directory doesn't have its own specific _layout.ejs file
 	// it will use the last _layout.ejs seen.
-	if (dirs.map((item) => item.name).indexOf("_layout.ejs") > -1) {
+	if (files.includes("_layout.ejs")) {
 		lastWithLayout = prefix;
 
 		let contents = await readFile(`${prefix}_layout.ejs`, {
@@ -48,6 +55,17 @@ async function crawlDir(dirs, prefix, writePrefix, lastWithLayout) {
 		});
 		contents = contents.replace(highlighting_script_regex, "");
 		template_cache[prefix] = contents;
+	}
+
+	if (files.includes("_props.json")) {
+		page_data = {
+			...page_data,
+			...JSON.parse(
+				await readFile(`${prefix}_props.json`, {
+					encoding: "utf-8",
+				}),
+			),
+		};
 	}
 
 	const dir_promises = [];
@@ -60,11 +78,27 @@ async function crawlDir(dirs, prefix, writePrefix, lastWithLayout) {
 					dir,
 					`${writePrefix}${item.name}/`,
 					lastWithLayout,
+					page_data,
 				),
 			);
 		} else if (item.isFile() || item.isSymbolicLink()) {
 			if (item.name.slice(-4) !== ".ejs" || item.name === "_layout.ejs") {
 				continue;
+			}
+
+			const file_name = item.name.slice(0, item.name.length - 4);
+
+			const this_page_data = { ...page_data };
+
+			if (files.includes(`${file_name}.json`)) {
+				Object.assign(
+					this_page_data,
+					JSON.parse(
+						await readFile(`${prefix}${file_name}.json`, {
+							encoding: "utf-8",
+						}),
+					),
+				);
 			}
 
 			const readFrom = `${prefix}${item.name}`;
@@ -75,15 +109,13 @@ async function crawlDir(dirs, prefix, writePrefix, lastWithLayout) {
 
 			const writeTo =
 				// rome-ignore lint/style/useTemplate: Easier to read
-				`out/${writePrefix}` +
-				(item.name !== "index.ejs"
-					? `${item.name.slice(0, item.name.length - 4)}/`
-					: "");
+				`out/${writePrefix}` + (file_name !== "index" ? `${file_name}/` : "");
 			to_compile.push({
 				path: readFrom,
 				writeTo: `${writeTo}index.html`,
 				folderPath: writeTo,
 				layout: lastWithLayout,
+				info: this_page_data,
 			});
 		} else {
 			console.warn(
@@ -112,7 +144,7 @@ async function render(file_info) {
 		await readFile(file_info.path, {
 			encoding: "utf-8",
 		}),
-		render_data,
+		{ ...render_data, ...file_info.info },
 	);
 
 	// Compute all syntax highlighting for code blocks
@@ -125,7 +157,10 @@ async function render(file_info) {
 		out = out.replace(hljs_regex_replace, replace);
 	}
 
-	out = ejs.render(template_cache[file_info.layout], { body: out });
+	out = ejs.render(template_cache[file_info.layout], {
+		...file_info.info,
+		body: out,
+	});
 
 	out = minifyHtml.minify(Buffer.from(out), {
 		do_not_minify_doctype: true,

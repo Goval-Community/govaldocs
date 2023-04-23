@@ -1,0 +1,9 @@
+{
+	"NAVIGATION_PAGES": [
+		{ "url": "/middleware/", "name": "Middlewares" },
+		{ "url": "/middleware/scrollback", "name": "Scrollback" },
+		{ "url": "/middleware/ratelimit", "name": "Ratelimit" },
+		{ "url": "/middleware/termed", "name": "Termed" },
+		{ "url": "/middleware/clippy", "name": "Clippy" }
+	]
+}

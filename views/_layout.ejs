@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,16 +10,24 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
 		<link
 			href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap"
-			rel="stylesheet" />
-		<link href="/dark.min.css"
-			rel="stylesheet" type="text/css" />
-		<link href="/highlightjs/tokyo-night.css" rel="stylesheet"
-			type="text/css" />
+			rel="stylesheet"
+		/>
+		<link href="/dark.min.css" rel="stylesheet" type="text/css" />
+		<link
+			href="/highlightjs/tokyo-night.css"
+			rel="stylesheet"
+			type="text/css"
+		/>
 		<!--  -->
 		<link href="/style.css" rel="stylesheet" type="text/css" />
-		
+
 		<!-- Favicon -->
-		<link rel="icon" href="https://replit.com/public/icons/favicon-prompt-192.png" type="image/png" sizes="192x192">
+		<link
+			rel="icon"
+			href="https://replit.com/public/icons/favicon-prompt-192.png"
+			type="image/png"
+			sizes="192x192"
+		/>
 	</head>
 
 	<body>
@@ -28,19 +35,23 @@
 			<header>Navigation:</header>
 			<ul>
 				<li><a href="/">Home</a></li>
-				<li><a href="/introduction">Introduction</a></li>
-				<li><a href="/services">Services</a></li>
-				<li><a href="/middleware">Middlewares</a></li>
-				<li><a href="/implementations">Implementations</a></li>
-				<li><a href="/protobuf">Protobuf</a></li>
+				<% for(let element of NAVIGATION_PAGES) { %>
+
+				<li><a href="<%= element.url %>"><%= element.name %></a></li>
+
+				<% } %>
 			</ul>
 		</nav>
 		<%- body %>
-			<footer>
-				Made with &#10084; by <a href="https://replit.com/@PotentialStyx">@PotentialStyx</a>
-			</footer>
+		<footer>
+			Made with &#10084; by
+			<a href="https://replit.com/@PotentialStyx">@PotentialStyx</a>
+		</footer>
 
-			<script type="module" src="/script.js" id="highlighting-script"></script>
-		</body>
-
-	</html>
+		<script
+			type="module"
+			src="/script.js"
+			id="highlighting-script"
+		></script>
+	</body>
+</html>
