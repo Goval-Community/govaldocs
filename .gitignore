@@ -1,5 +1,5 @@
 yarn.lock
-test.mjs
+test*
 *.zip
 node_modules
 .vscode

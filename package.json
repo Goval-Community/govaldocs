@@ -19,6 +19,7 @@
 		"chalk": "^5.2.0",
 		"ejs": "^3.1.9",
 		"highlight.js": "^11.7.0",
+		"log-update": "^5.0.1",
 		"wrangler": "^2.16.0"
 	},
 	"nodemonConfig": {
