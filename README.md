@@ -23,7 +23,7 @@ The preview server is powered by `koa`. The project is compiled into static file
 ## Todo
 
 - [x] Better output from `render.js`
-- [ ] Extract actual template rendering logic from `render.js` into it's own file so it can be shared by the dev server.
+- [x] Extract actual template rendering logic from `render.js` into it's own file so it can be shared by the dev server.
+- [x] Replace current `koa` dev server with one that uses same render logic as `render.js`
 - [ ] Minify all static files during build
-- [ ] Replace `koa` dev server with one that uses same render logic as `render.js`
 - [ ] Make `render.js` only rebuild changed files
