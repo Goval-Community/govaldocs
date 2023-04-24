@@ -1,9 +1,8 @@
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
 import minifyHtml from "@minify-html/node";
 import logUpdate from "log-update";
-import hljs from "highlight.js";
-import * as ejs from "ejs";
 import chalk from "chalk";
+import RenderEngine from "./engine.js";
 
 const startTime = performance.now();
 const spinner = [
@@ -20,14 +19,6 @@ const spinner = [
 	"🕙",
 	"🕚",
 ];
-
-import makeProtobufLang from "./ssg/protobuf.js";
-
-// Makes sure all custom message types are rendered as types and not just normal text
-hljs.registerLanguage(
-	"protobuf",
-	makeProtobufLang(JSON.parse(await readFile("ssg/apitypes.json"))),
-);
 
 const template_cache = {};
 const highlighting_script_regex =
@@ -129,38 +120,19 @@ async function crawlDir(
 }
 
 const render_data = { protobuf: await readFile("public/api.proto") };
-const hljs_regex =
-	/<pre><code class="language-([A-z]*)">((?:.|\n)*?)<\/code><\/pre>/gm;
-const hljs_regex_replace = new RegExp(hljs_regex.source, "m");
 
-async function render(file_info) {
-	if (file_info.folderPath !== "") {
-		await mkdir(file_info.folderPath, {
+async function render(renderer, fileInfo) {
+	if (fileInfo.folderPath !== "") {
+		await mkdir(fileInfo.folderPath, {
 			recursive: true,
 		});
 	}
 
-	let out = ejs.render(
-		await readFile(file_info.path, {
-			encoding: "utf-8",
-		}),
-		{ ...render_data, ...file_info.info },
+	let out = await renderer.renderFile(
+		fileInfo.path,
+		template_cache[fileInfo.layout],
+		{ ...render_data, ...fileInfo.info },
 	);
-
-	// Compute all syntax highlighting for code blocks
-	const matches = out.matchAll(hljs_regex);
-	for (const match of matches) {
-		const lang = match[1];
-		const replace = `<pre><code class="language-${lang} hljs">${
-			hljs.highlight(match[2], { language: lang }).value
-		}</code></pre>`;
-		out = out.replace(hljs_regex_replace, replace);
-	}
-
-	out = ejs.render(template_cache[file_info.layout], {
-		...file_info.info,
-		body: out,
-	});
 
 	out = minifyHtml.minify(Buffer.from(out), {
 		do_not_minify_doctype: true,
@@ -169,14 +141,14 @@ async function render(file_info) {
 		keep_spaces_between_attributes: true,
 	});
 
-	await writeFile(file_info.writeTo, out);
+	await writeFile(fileInfo.writeTo, out);
 	logUpdate.clear();
 	console.log(
 		// rome-ignore lint/style/useTemplate: Easier to read
 		chalk.green("🔨 Built ") +
-			chalk.cyan(file_info.path.padEnd(longestPath + 2)) +
+			chalk.cyan(fileInfo.path.padEnd(longestPath + 2)) +
 			"-> " +
-			chalk.magenta(file_info.writeTo),
+			chalk.magenta(fileInfo.writeTo),
 	);
 	renderSpinner();
 
@@ -202,9 +174,10 @@ const cancelSpinner = setInterval(() => {
 	renderSpinner();
 }, 1000 / spinner.length); // One full cycle every second.
 
+const renderEngine = new RenderEngine();
 const filePromises = [];
 for (const file of to_compile) {
-	filePromises.push(render(file));
+	filePromises.push(render(renderEngine, file));
 }
 await Promise.all(filePromises);
 

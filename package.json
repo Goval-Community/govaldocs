@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
-		"dev": "NODE_ENV=development nodemon --quiet --no-stdin -x \"node --harmony\" index.js",
+		"dev": "node index.js",
 		"build": "bash render.sh",
 		"preview": "wrangler pages dev out --compatibility-date=2023-04-22",
 		"deploy": "wrangler pages publish out",
@@ -30,14 +30,9 @@
 		"ext": "*.*"
 	},
 	"devDependencies": {
-		"@webpack-cli/generators": "^2.5.0",
 		"koa": "^2.13.4",
-		"koa-ejs": "^4.3.0",
 		"koa-mount": "^4.0.0",
-		"koa-router": "^12.0.0",
 		"koa-send": "^5.0.1",
-		"koa-static": "^5.0.0",
-		"koa-webpack": "^6.0.0",
-		"nodemon": "^2.0.22"
+		"koa-static": "^5.0.0"
 	}
 }

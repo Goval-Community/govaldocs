@@ -14,7 +14,7 @@ The preview server is powered by `koa`. The project is compiled into static file
 
 ## Contributing
 
-- ~~Use `yarn run dev` to start the dev server on `localhost:3000`.~~ ⚠️ The dev server is very out of date with the static build pipeline atm, it's use isn't recommended.
+- Use `yarn run dev` to start the dev server on `localhost:3000`.
 - You can build the site with `yarn run build`.
   - `yarn run preview` will then preview the output.
   - `yarn run deploy` will deploy it to cloudflare pages.
