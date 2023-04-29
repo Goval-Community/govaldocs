@@ -1,14 +1,17 @@
-html, body {
-  height: 100%;
-  width: 100%;
-}#replit-badge,
+html,
+body {
+	height: 100%;
+	width: 100%;
+}
+#replit-badge,
 #replit-badge:before,
 #replit-badge:after {
 	background: none;
 	border: none;
 }
 
-html, body {
+html,
+body {
 	font-size: 70%;
 }
 
@@ -97,7 +100,7 @@ nav ul li a:hover:after {
 	nav {
 		margin-top: 0;
 	}
-	
+
 	nav header {
 		display: none;
 	}
@@ -141,6 +144,20 @@ footer a:before {
 }
 
 :target {
-  padding-left: 5px;
-  background-color: var(--background-1);
+	padding-left: 5px;
+	background-color: var(--background-1);
+	padding-right: 5px;
+	border-radius: 5px;
+}
+
+q {
+	color: var(--primary-2);
+	font-family: var(--font-body);
+	font-size: 1.6rem;
+	font-weight: 400;
+	line-height: 2.88rem;
+}
+
+q > * {
+	margin: 0;
 }
