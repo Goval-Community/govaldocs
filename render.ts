@@ -1,8 +1,19 @@
-import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
-import minifyHtml from "@minify-html/node";
+import { readdir, mkdir } from "node:fs/promises";
+import { minify } from "html-minifier-terser";
+import RenderEngine from "./engine.ts";
 import logUpdate from "log-update";
 import chalk from "chalk";
-import RenderEngine from "./engine.js";
+
+import type { Dirent } from "node:fs";
+import type ejs from "ejs";
+
+type RenderData = {
+	path: string;
+	writeTo: string;
+	folderPath: string;
+	layout: string;
+	info: { [id: string]: string };
+};
 
 const startTime = performance.now();
 const spinner = [
@@ -20,19 +31,17 @@ const spinner = [
 	"🕚",
 ];
 
-const template_cache = {};
-const highlighting_script_regex =
-	/<script .*?id="highlighting-script".*?><\/script>/g;
+const template_cache: { [id: string]: string } = {};
 
-const to_compile = [];
+const to_compile: RenderData[] = [];
 let longestPath = 0;
 
 async function crawlDir(
-	dirs,
-	prefix,
-	writePrefix,
-	lastWithLayout,
-	page_data = {},
+	dirs: Dirent[],
+	prefix: string,
+	writePrefix: string,
+	lastWithLayout: string = "",
+	page_data: ejs.Data = {},
 ) {
 	const files = dirs.map((item) => item.name);
 	// If _layout.ejs exists in directory mark that as the most recently seen layout file.
@@ -41,21 +50,13 @@ async function crawlDir(
 	if (files.includes("_layout.ejs")) {
 		lastWithLayout = prefix;
 
-		let contents = await readFile(`${prefix}_layout.ejs`, {
-			encoding: "utf-8",
-		});
-		contents = contents.replace(highlighting_script_regex, "");
-		template_cache[prefix] = contents;
+		template_cache[prefix] = await Bun.file(`${prefix}_layout.ejs`).text();
 	}
 
 	if (files.includes("_props.json")) {
 		page_data = {
 			...page_data,
-			...JSON.parse(
-				await readFile(`${prefix}_props.json`, {
-					encoding: "utf-8",
-				}),
-			),
+			...JSON.parse(await Bun.file(`${prefix}_props.json`).text()),
 		};
 	}
 
@@ -84,11 +85,7 @@ async function crawlDir(
 			if (files.includes(`${file_name}.json`)) {
 				Object.assign(
 					this_page_data,
-					JSON.parse(
-						await readFile(`${prefix}${file_name}.json`, {
-							encoding: "utf-8",
-						}),
-					),
+					JSON.parse(await Bun.file(`${prefix}${file_name}.json`).text()),
 				);
 			}
 
@@ -119,9 +116,9 @@ async function crawlDir(
 	await Promise.all(dir_promises);
 }
 
-const render_data = { protobuf: await readFile("public/api.proto") };
+const render_data = { protobuf: await Bun.file("public/api.proto").text() };
 
-async function render(renderer, fileInfo) {
+async function render(renderer: RenderEngine, fileInfo: RenderData) {
 	if (fileInfo.folderPath !== "") {
 		await mkdir(fileInfo.folderPath, {
 			recursive: true,
@@ -134,14 +131,9 @@ async function render(renderer, fileInfo) {
 		{ ...render_data, ...fileInfo.info },
 	);
 
-	out = minifyHtml.minify(Buffer.from(out), {
-		do_not_minify_doctype: true,
-		keep_html_and_head_opening_tags: true,
-		ensure_spec_compliant_unquoted_attribute_values: true,
-		keep_spaces_between_attributes: true,
-	});
+	out = await minify(out, { collapseWhitespace: true, removeComments: true });
 
-	await writeFile(fileInfo.writeTo, out);
+	await Bun.write(fileInfo.writeTo, out);
 	logUpdate.clear();
 	console.log(
 		// rome-ignore lint/style/useTemplate: Easier to read

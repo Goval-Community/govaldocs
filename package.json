@@ -2,10 +2,10 @@
 	"name": "govaldocs",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
+	"main": "index.ts",
 	"type": "module",
 	"scripts": {
-		"dev": "node index.js",
+		"dev": "bun --hot index.ts",
 		"build": "bash render.sh",
 		"preview": "wrangler pages dev out --compatibility-date=2023-04-22",
 		"deploy": "wrangler pages publish out",
@@ -15,10 +15,10 @@
 	"author": "PotentialStyx",
 	"license": "MIT",
 	"dependencies": {
-		"@minify-html/node": "^0.10.8",
 		"chalk": "^5.2.0",
 		"ejs": "^3.1.9",
 		"highlight.js": "^11.7.0",
+		"html-minifier-terser": "^7.2.0",
 		"log-update": "^5.0.1",
 		"wrangler": "^2.16.0"
 	},
@@ -30,9 +30,6 @@
 		"ext": "*.*"
 	},
 	"devDependencies": {
-		"koa": "^2.13.4",
-		"koa-mount": "^4.0.0",
-		"koa-send": "^5.0.1",
-		"koa-static": "^5.0.0"
+		"bun-types": "^0.5.0"
 	}
 }
