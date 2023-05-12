@@ -161,3 +161,12 @@ q {
 q > * {
 	margin: 0;
 }
+
+.info {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 1.2rem;
+  line-height: 0.2rem;
+  font-size: 1.3rem;
+  color: var(--primary-3);
+}

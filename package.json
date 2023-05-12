@@ -1,35 +1,30 @@
 {
-	"name": "govaldocs",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.ts",
-	"type": "module",
-	"scripts": {
-		"dev": "bun --hot index.ts",
-		"build": "bash render.sh",
-		"preview": "wrangler pages dev out --compatibility-date=2023-04-22",
-		"deploy": "wrangler pages publish out",
-		"package": "rm -f out.zip && cd out && zip -r ../out.zip *"
-	},
-	"keywords": [],
-	"author": "PotentialStyx",
-	"license": "MIT",
-	"dependencies": {
-		"chalk": "^5.2.0",
-		"ejs": "^3.1.9",
-		"highlight.js": "^11.7.0",
-		"html-minifier-terser": "^7.2.0",
-		"log-update": "^5.0.1",
-		"wrangler": "^2.16.0"
-	},
-	"nodemonConfig": {
-		"verbose": false,
-		"ignore": [
-			".config/*"
-		],
-		"ext": "*.*"
-	},
-	"devDependencies": {
-		"bun-types": "^0.5.0"
-	}
+  "name": "govaldocs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot index.ts",
+    "build": "bash render.sh",
+    "preview": "wrangler pages dev out --compatibility-date=2023-04-22",
+    "deploy": "wrangler pages publish out",
+    "package": "rm -f out.zip && cd out && zip -r ../out.zip *",
+    "format": "bash format.sh"
+  },
+  "keywords": [],
+  "author": "PotentialStyx",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "ejs": "^3.1.9",
+    "highlight.js": "^11.7.0",
+    "html-minifier-terser": "^7.2.0",
+    "log-update": "^5.0.1",
+    "prettier": "^2.8.8",
+    "wrangler": "^2.16.0"
+  },
+  "devDependencies": {
+    "bun-types": "^0.5.0"
+  }
 }
