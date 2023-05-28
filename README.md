@@ -1,5 +1,27 @@
-# The Unofficial Goval Docs
-This is a WIP project by [PotentialStyx](https://github.com/PotentialStyx), to write up-to-date docs for replit's goval protocol.
+<div align="center">
+	<img src="./public/banner.svg" width="80%"/>
+	<br />
+	<a href="https://choosealicense.com/licenses/mit">
+		<img
+			alt="License: MIT"
+			src="https://img.shields.io/badge/license-MIT-e49252"
+		/>
+	</a>
+	<!-- <a href="https://github.com/PotentialStyx/govaldocs/issues/4">
+		<img
+			alt="Services fully documented: 1"
+			src="https://img.shields.io/badge/services%20fully%20documented-1-e49252"
+		/>
+	</a> -->
+	<hr />
+	<br />
+	<p>
+		This is a WIP project by
+		<a href="https://github.com/PotentialStyx">PotentialStyx</a>, to write
+		up-to-date docs for replit's goval protocol.
+	</p>
+	<h6>Disclaimer: This project is entirely unofficial and not endorsed by replit</h6>
+</div>
 
 ## Project Structure
 
