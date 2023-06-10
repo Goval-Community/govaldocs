@@ -1,8 +1,24 @@
 {
 	"NAVIGATION_PAGES": [
-		{ "url": "/service/", "name": "Services" },
-		{ "url": "/service/chat", "name": "Chat" },
-		{ "url": "/service/ot", "name": "OT" },
-		{ "url": "/service/chan0", "name": "Channel 0" }
+		{
+			"url": "/service/",
+			"name": "Services"
+		},
+		{
+			"url": "/service/goval-ident",
+			"name": "Goval Ident"
+		},
+		{
+			"url": "/service/chat",
+			"name": "Chat"
+		},
+		{
+			"url": "/service/ot",
+			"name": "OT"
+		},
+		{
+			"url": "/service/chan0",
+			"name": "Channel 0"
+		}
 	]
 }
