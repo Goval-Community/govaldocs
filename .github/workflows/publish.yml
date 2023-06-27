@@ -1,0 +1,45 @@
+on:
+    workflow_dispatch:
+        inputs:
+            deploy_branch:
+                description: "Pages Branch"
+                required: true
+                default: "main"
+                type: choice
+                options:
+                    - main
+                    - preview
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            deployments: write
+        name: Publish to Cloudflare Pages
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Install bun
+              uses: oven-sh/setup-bun@v1
+              with:
+                  bun-version: latest
+
+            - name: Install dependencies
+              run: bun install
+
+            - name: Build site
+              run: bun run build
+
+            - name: Publish to Cloudflare Pages
+              uses: cloudflare/pages-action@v1
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+                  projectName: ${{ vars.CLOUDFLARE_PROJECT_NAME }}
+                  directory: out
+                  # Optional: Enable this if you want to have GitHub Deployments triggered
+                  gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+                  branch: ${{ inputs.deploy_branch }}
+                  wranglerVersion: "3"
