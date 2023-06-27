@@ -17,8 +17,9 @@ jobs:
             contents: read
             deployments: write
         name: Publish to Cloudflare Pages
+        environment: production
         steps:
-            - name: Checkout
+            - name: Checkout Repo
               uses: actions/checkout@v3
 
             - name: Install bun
@@ -26,10 +27,10 @@ jobs:
               with:
                   bun-version: latest
 
-            - name: Install dependencies
+            - name: Install Dependencies
               run: bun install
 
-            - name: Build site
+            - name: Build Site
               run: bun run build
 
             - name: Publish to Cloudflare Pages
