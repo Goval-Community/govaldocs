@@ -1,4 +1,4 @@
-// @replit/protocol 0.3.4
+// @replit/protocol 0.3.12
 syntax = "proto3";
 
 package api;
@@ -190,6 +190,9 @@ message Command {
 		ToolchainGetRequest toolchainGetRequest = 435;
 		ToolchainGetResponse toolchainGetResponse = 436;
 		ToolchainChanged toolchainChanged = 437;
+		ReplspaceApiOpenMultipleFiles replspaceApiOpenMultipleFiles = 438;
+		NixModulesGetRegistryRequest nixModulesGetRegistryRequest = 439;
+		NixModulesGetRegistryResponse nixModulesGetRegistryResponse = 440;
 	}
 }
 
@@ -816,6 +819,10 @@ message ReplspaceApiGitHubToken {
 	string token = 2;
 }
 
+message ReplspaceApiOpenMultipleFiles {
+	repeated string files = 1;
+}
+
 message Focused {
 }
 
@@ -1123,9 +1130,17 @@ message GitHubImportConfig {
 }
 
 message DeploymentConfig {
+	enum Target {
+		GCE = 0;
+		CLOUDRUN = 1;
+		STATIC = 2;
+	}
+
 	Exec run = 1;
 	Exec build = 2;
 	bool ignorePorts = 3;
+	DeploymentConfig.Target target = 4;
+	string publicDir = 5;
 }
 
 message ExtensionConfig {
@@ -1261,6 +1276,10 @@ message NixModule {
 	repeated DebuggerOption debuggers = 6;
 	repeated PackagerOption packagers = 7;
 	repeated LanguageServerOption languageServers = 8;
+	string buildType = 9;
+	repeated string resolutionPath = 10;
+	string resolvedId = 11;
+	string referencedId = 12;
 }
 
 message NixModulesChanged {
@@ -1268,6 +1287,31 @@ message NixModulesChanged {
 }
 
 message NixModulesBuildRequest {
+}
+
+message NixModulesGetRegistryRequest {
+}
+
+message NixModulesGetRegistryResponse {
+	repeated NixModulesRegistryEntry modules = 1;
+	map<string,NixModulesUpgradeMapEntry> autoUpgrade = 2;
+	map<string,NixModulesUpgradeMapEntry> recommendUpgrade = 3;
+}
+
+message NixModulesRegistryEntry {
+	string id = 1;
+	string name = 2;
+	string description = 3;
+	int32 version = 4;
+	string tag = 5;
+	repeated string tags = 6;
+	string commit = 7;
+	string path = 8;
+}
+
+message NixModulesUpgradeMapEntry {
+	string to = 1;
+	string changelog = 2;
 }
 
 message ToolchainGetRequest {
@@ -1414,6 +1458,7 @@ message ReplTransfer {
 	repeated string customDomains = 4;
 	repeated TLSCertificate certificates = 5;
 	repeated string flags = 6;
+	repl.Metadata metadata = 7;
 }
 
 message AllowReplRequest {
@@ -1500,6 +1545,8 @@ message GovalReplIdentity {
 	string originReplid = 6;
 	int64 userId = 7;
 	repl.BuildInfo buildInfo = 8;
+	bool isTeam = 9;
+	repeated string roles = 10;
 }
 
 message lore {
@@ -1597,6 +1644,7 @@ message repl {
 	message Buckets {
 		string snapshots = 1;
 		string metadata = 2;
+		string diskBlocks = 3;
 	}
 
 	message Repl {
@@ -1609,6 +1657,8 @@ message repl {
 		string database = 7;
 		repl.Buckets buckets = 8;
 		repl.UserId userId = 9;
+		bool isTeam = 10;
+		repeated string roles = 11;
 	}
 
 	enum Environment {
