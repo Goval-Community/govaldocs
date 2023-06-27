@@ -9,6 +9,9 @@ on:
                 options:
                     - main
                     - preview
+    push:
+        branches:
+            - main
 
 jobs:
     publish:
