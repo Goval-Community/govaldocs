@@ -1,0 +1,8 @@
+/_app/*
+  X-Robots-Tag: noindex
+	Cache-Control: no-cache
+/_app/immutable/*
+  ! Cache-Control
+	Cache-Control: public, immutable, max-age=31536000
+
+# https://github.com/sveltejs/kit/blob/b6c7e8b574b28b83407c068757a456d511891027/packages/adapter-cloudflare/index.js#L137
