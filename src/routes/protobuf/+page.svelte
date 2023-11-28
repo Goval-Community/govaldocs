@@ -12,7 +12,11 @@
 	>
 	on Discord.
 	<br />
-	<a download="api.proto" href="/api.proto">Download</a>
+	<a
+		download="api.proto"
+		href="https://raw.githubusercontent.com/goval-community/replit-protocol/main/api.proto"
+		>Download</a
+	>
 </p>
 
 <pre><code class="hljs"
