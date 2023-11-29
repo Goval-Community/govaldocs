@@ -41,7 +41,18 @@
 	<a href="https://discord.com/users/975920435432661052">PotentialStyx#2158</a
 	>
 	on Discord.
-	<br />
+</p>
+
+<p>
+	Protobuf version:
+	<select bind:value={selectedVersion}>
+		{#each data.protobufVersions as version}
+			<option value={version}>v{version}</option>
+		{/each}
+	</select>
+</p>
+
+<p>
 	<a
 		download="api.proto"
 		href="https://raw.githubusercontent.com/goval-community/replit-protocol/master/api.proto"
@@ -49,12 +60,6 @@
 		Download
 	</a>
 </p>
-
-<select bind:value={selectedVersion}>
-	{#each data.protobufVersions as version}
-		<option value={version}>v{version}</option>
-	{/each}
-</select>
 
 {#await getOrLoadProtobuf(selectedVersion)}
 	<p>
