@@ -35,8 +35,7 @@
 <h2>This site</h2>
 <p>
 	This site is unofficial, if you have found any issues please dm
-	<a href="https://discord.com/users/975920435432661052">PotentialStyx#2158</a
-	>
+	<a href="https://discord.com/users/975920435432661052">PotentialStyx</a>
 	on discord.
 </p>
 

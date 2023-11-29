@@ -8,8 +8,7 @@
 <p>
 	This is a more up-to-date version of Goval's Protobuf, if you would like it
 	to be updated DM
-	<a href="https://discord.com/users/975920435432661052">PotentialStyx#2158</a
-	>
+	<a href="https://discord.com/users/975920435432661052">PotentialStyx</a>
 	on Discord.
 	<br />
 	<a download="api.proto" href="/api.proto">Download</a>
