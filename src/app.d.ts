@@ -3,11 +3,16 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+
+		interface Locals {
+			protobufVersions: string[];
+		}
+
 		interface PageData {
 			// Links to be displayed in the nav bar
 			nav: [string, string][];
 		}
+
 		// interface Platform {}
 	}
 }

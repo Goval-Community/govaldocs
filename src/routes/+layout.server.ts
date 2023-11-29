@@ -1,4 +1,4 @@
-import type { LayoutLoad } from "./$types";
+import type { LayoutServerLoad } from "./$types";
 
 export const prerender = true;
 
@@ -13,4 +13,4 @@ export const load = (() => {
 			["/debug-pane", "Debug Pane"],
 		],
 	};
-}) satisfies LayoutLoad;
+}) satisfies LayoutServerLoad;
