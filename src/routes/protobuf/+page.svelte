@@ -13,6 +13,10 @@
 
 	let selectedVersion = data.protobufVersions[0];
 
+	let compareVersion1 = data.protobufVersions[0];
+	let compareVersion2 =
+		data.protobufVersions[data.protobufVersions.length - 1];
+
 	/**
 	 *
 	 * @param version
@@ -59,6 +63,10 @@
 	>
 		Download
 	</a>
+
+	<br />
+
+	<a href="#compare">Compare versions</a>
 </p>
 
 {#await getOrLoadProtobuf(selectedVersion)}
@@ -71,3 +79,30 @@
 				.value}</code
 		></pre>
 {/await}
+
+<h2 id="compare">Compare</h2>
+<p>
+	Compare Protobuf versions:
+
+	<br />
+
+	<select bind:value={compareVersion1}>
+		{#each data.protobufVersions as version}
+			<option value={version}>v{version}</option>
+		{/each}
+	</select>
+	...
+	<select bind:value={compareVersion2}>
+		{#each data.protobufVersions as version}
+			<option value={version}>v{version}</option>
+		{/each}
+	</select>
+
+	<br />
+
+	<a
+		href="https://github.com/goval-community/replit-protocol/compare/{compareVersion1}...{compareVersion2}"
+		target="_blank"
+		rel="noopener noreferrer">Compare</a
+	>
+</p>
