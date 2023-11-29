@@ -1,7 +1,37 @@
 <script lang="ts">
-	import protobuf from "$lib/api.proto?raw";
+	import type { PageData } from "./$types";
 
 	import hljs from "highlight.js";
+	import { browser } from "$app/environment";
+
+	export let data: PageData;
+
+	/**
+	 * Protobuf files for each version.
+	 */
+	const protobufs: Record<string, string> = {};
+
+	let selectedVersion = data.protobufVersions[0];
+
+	/**
+	 *
+	 * @param version
+	 */
+	async function getOrLoadProtobuf(version: string) {
+		if (!browser) {
+			return "";
+		}
+
+		if (version in protobufs) {
+			return protobufs[version];
+		}
+
+		return await fetch(
+			`https://raw.githubusercontent.com/goval-community/replit-protocol/${version}/api.proto`,
+		)
+			.then((res) => res.text())
+			.then((text) => (protobufs[version] = text));
+	}
 </script>
 
 <h1>Protobuf</h1>
@@ -14,11 +44,25 @@
 	<br />
 	<a
 		download="api.proto"
-		href="https://raw.githubusercontent.com/goval-community/replit-protocol/main/api.proto"
-		>Download</a
+		href="https://raw.githubusercontent.com/goval-community/replit-protocol/master/api.proto"
 	>
+		Download
+	</a>
 </p>
 
-<pre><code class="hljs"
-		>{@html hljs.highlight(protobuf, { language: "protobuf" }).value}</code
-	></pre>
+<select bind:value={selectedVersion}>
+	{#each data.protobufVersions as version}
+		<option value={version}>v{version}</option>
+	{/each}
+</select>
+
+{#await getOrLoadProtobuf(selectedVersion)}
+	<p>
+		Loading Protobuf v{selectedVersion}...
+	</p>
+{:then protobuf}
+	<pre><code class="hljs"
+			>{@html hljs.highlight(protobuf, { language: "protobuf" })
+				.value}</code
+		></pre>
+{/await}
