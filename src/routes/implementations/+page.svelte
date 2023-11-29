@@ -60,6 +60,5 @@
 
 <p>
 	Have you written a client/server implementation and want it listed here? DM
-	<code>PotentialStyx#2158</code> on Discord with the information to get it listed
-	here.
+	<code>PotentialStyx</code> on Discord with the information to get it listed here.
 </p>
